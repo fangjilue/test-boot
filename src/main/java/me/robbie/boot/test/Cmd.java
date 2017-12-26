@@ -16,22 +16,18 @@ import java.util.Arrays;
  * @since [产品/模块版本]
  */
 @Component
-public class Cmd implements CommandLineRunner,ApplicationRunner {
+public class Cmd implements CommandLineRunner, ApplicationRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        if(args != null) {
-            System.out.println("=====应用已经成功启动=====" + Arrays.asList(args));
-        }else{
-            System.out.println("=====应用已经成功启动=====");
-        }
+        System.out.println("=====应用已经成功启动=====" + Arrays.asList(args));
     }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         System.out.println("----------------");
-        for(String name : args.getOptionNames()){
-            System.out.println("name=" + name + ",value="+args.getOptionValues(name));
+        for (String name : args.getOptionNames()) {
+            System.out.println("name=" + name + ",value=" + args.getOptionValues(name));
         }
     }
 }

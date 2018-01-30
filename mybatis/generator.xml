@@ -8,7 +8,7 @@
     -->
     <context id="MySqlTables" targetRuntime="MyBatis3" >
 
-        <commentGenerator>
+        <commentGenerator type="me.robbie.tools.mybatis.MapperCommentGenerator">
             <property name="suppressAllComments" value="true" />
         </commentGenerator>
 

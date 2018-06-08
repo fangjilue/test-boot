@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import sun.awt.windows.ThemeReader;
 
 /**
  * <一句话功能简述>
@@ -57,5 +58,21 @@ public class SimpleAction {
 
         return "error";
     }
+
+
+    @RequestMapping("/test")
+    String test(){
+
+        teacherService.test();
+
+        return "ok" + Thread.currentThread().getName()+","+System.currentTimeMillis();
+    }
+
+    @RequestMapping("/groovy")
+    String doGroovy(){
+        return  teacherService.groovy();
+
+    }
+
 
 }

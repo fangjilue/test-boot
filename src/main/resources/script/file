@@ -1,0 +1,15 @@
+import me.robbie.boot.test.script.RuleEngine
+import me.robbie.boot.test.script.RuleParam
+import me.robbie.boot.test.script.RuleResult
+
+class TestRule2 implements RuleEngine {
+
+    @Override
+    RuleResult exe(RuleParam param) {
+
+        println(param)
+
+        new RuleResult(code:"1",name:"fail")
+
+    }
+}

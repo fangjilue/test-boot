@@ -15,4 +15,8 @@ public interface TeacherService {
     boolean saveException();
 
     boolean saveprivate();
+
+    void test();
+
+    String groovy();
 }

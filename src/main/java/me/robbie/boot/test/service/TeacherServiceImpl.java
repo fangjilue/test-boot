@@ -1,14 +1,21 @@
 package me.robbie.boot.test.service;
 
+import groovy.lang.GroovyClassLoader;
 import me.robbie.boot.test.dao.CourseDOMapper;
 import me.robbie.boot.test.dao.TeacherDOMapper;
 import me.robbie.boot.test.model.CourseDO;
 import me.robbie.boot.test.model.TeacherDO;
+import me.robbie.boot.test.script.RuleEngine;
+import me.robbie.boot.test.script.RuleParam;
+import me.robbie.boot.test.script.RuleResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.FileCopyUtils;
 
+import javax.annotation.PostConstruct;
+import java.io.InputStreamReader;
 import java.util.Date;
 
 /**
@@ -30,6 +37,11 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Autowired
     private StudentService studentService;
+
+    @PostConstruct
+    public void init(){
+        System.out.println("thread:--------" +Thread.currentThread().getName());
+    }
 
     @Override
     @Transactional
@@ -82,5 +94,51 @@ public class TeacherServiceImpl implements TeacherService {
     public boolean saveprivate() {
 
         return studentService.saveException();
+    }
+
+    @Async
+    @Override
+    public void test() {
+        try {
+            Thread.sleep(1000);
+
+            System.out.println("thread:" +Thread.currentThread().getName()+","+System.currentTimeMillis());
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    @Override
+    public String groovy() {
+        try {
+            //File file = new File("/Users/fangjilue/IdeaProjects/test/test-boot/src/main/resources/script/spring.groovy");
+            //File file = ResourceUtils.getFile("classpath:script/spring.groovy");
+            //System.out.println(file.getAbsolutePath());
+
+            //Resource fileRource = new ClassPathResource("script/spring.groovy");
+            //System.out.println(fileRource.getURL());
+
+            GroovyClassLoader gcl = new GroovyClassLoader(this.getClass().getClassLoader());
+            //System.out.println(gcl.getResource("script/spring.groovy"));
+
+            String script = FileCopyUtils.copyToString(new InputStreamReader(gcl.getResourceAsStream("script/spring.groovy")));
+
+            Class clazz = gcl.parseClass(script);
+
+            RuleEngine engine = (RuleEngine) clazz.newInstance();
+
+            RuleParam param = new RuleParam("java",18);
+
+            RuleResult result = engine.exe(param);
+
+            return result.toString();
+        }  catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "error";
+
     }
 }
